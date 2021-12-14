@@ -14,32 +14,32 @@ startOrPauseAPomodoroFromListButton.addEventListener("click", addClick);
 
 
 function inputFields() {
-  let minute = Number(minuteInputElement.value)
-  let second = Number(secondInputElement.value)
+  let minute = Number(minuteInputElement.value);
+  let second = Number(secondInputElement.value);
 
   if (minute < 60 && minute >= 0 && second < 60 && second >= 0) {
     addPomodoroToListButton.disabled = false
   } else {
     addPomodoroToListButton.disabled = true
-  }
+  };
 };
 
 function addClick() {
-  let minute = Number(minuteInputElement.value)
-  let second = Number(secondInputElement.value)
+  let minute = Number(minuteInputElement.value);
+  let second = Number(secondInputElement.value);
 
-  const formatInput = populateFormatPomodoro(minute, second)
-  minuteInputElement.value = formatInput[0]
-  secondInputElement.value = formatInput[1]
+  const formatInput = populateFormatPomodoro(minute, second);
+  minuteInputElement.value = formatInput[0];
+  secondInputElement.value = formatInput[1];
 
-  startOrPauseAPomodoroFromListButton.disabled = false
+  startOrPauseAPomodoroFromListButton.disabled = false;
 };
 
 function startOrPauseClick() {
-  const btnState = startOrPauseAPomodoroFromListButton.getAttribute("start-pause-state")
+  const btnState = startOrPauseAPomodoroFromListButton.getAttribute("start-pause-state");
 
-  if (btnState == "start") startPomodoro()
-  if (btnState == "pause") pausePomodoro()
+  if (btnState == "start") startPomodoro();
+  if (btnState == "pause") pausePomodoro();
 };
 
 function startPomodoro() {
@@ -57,54 +57,56 @@ function startPomodoro() {
 };
 
 function pausePomodoro() {
-  addPomodoroToListButton.disabled = false
-  startOrPauseAPomodoroFromListButton.setAttribute("start-pause-state", "start")
-  startOrPauseAPomodoroFromListButton.innerText = "start"
-  clearInterval(timer)
+  addPomodoroToListButton.disabled = false;
+  startOrPauseAPomodoroFromListButton.setAttribute("start-pause-state", "start");
+  startOrPauseAPomodoroFromListButton.innerText = "start";
+  
+  clearInterval(timer);
 };
 
 function pomodoroCountdown() {
-  totalMilliseconds -= 1000
+  totalMilliseconds -= 1000;
 
-  let minute = 0
-  let second = 0
+  let minute = 0;
+  let second = 0;
 
   if (totalMilliseconds >= 60000) {
     minute = parseInt(totalMilliseconds / 60000)
-  }
+  };
 
   if (totalMilliseconds >= 1000) {
     second = (totalMilliseconds - minute * 60000) / 1000
-  }
+  };
 
-  populateFormatPomodoro(minute, second)
+  populateFormatPomodoro(minute, second);
 
-  if (totalMilliseconds == 0) pomodoroComplete()
+  if (totalMilliseconds == 0) pomodoroComplete();
  };
 
  function pomodoroComplete() {
-  pausePomodoro()
-  startOrPauseAPomodoroFromListButton.disabled = true
-  setTimeout(`alert("Time is up")`, 100)
+  pausePomodoro();
+  startOrPauseAPomodoroFromListButton.disabled = true;
+
+  setTimeout(`alert("Time is up")`, 100);
  };
 
  function populateFormatPomodoro(minute, second) {
-   let formatMinute = minute
-   let formatSecond = second
+   let formatMinute = minute;
+   let formatSecond = second;
 
    if (minute == 0) {
      formatMinute = "00"
-   }
+   };
 
    if (minute < 10 && minute > 0) {
      formatMinute = "0" + minute
-   }
+   };
 
    if (second < 10) {
      formatSecond = "0" + second
-   }
+   };
 
-   pomodoroCounterDisplayElement.innerText = `${formatMinute}:${formatSecond}`
-   return [formatMinute, formatSecond]
+   pomodoroCounterDisplayElement.innerText = `${formatMinute}:${formatSecond}`;
+   return [formatMinute, formatSecond];
 };
   
