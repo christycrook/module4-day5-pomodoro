@@ -9,7 +9,7 @@ const startOrPauseAPomodoroFromListButton = document.getElementById("pomorodoFor
 minuteInputElement.addEventListener("keydown", inputFields);
 secondInputElement.addEventListener("keydown", inputFields);
 addPomodoroToListButton.addEventListener("click", addClick);
-startOrPauseAPomodoroFromListButton.addEventListener("click", startPomodoro);
+startOrPauseAPomodoroFromListButton.addEventListener("click", startInterval);
 
 function inputFields() {
   let minute = Number(minuteInputElement.value);
@@ -41,14 +41,15 @@ let timer = null;
 
   let minute = Number(minuteInputElement.value);
   let second = Number(secondInputElement.value);
+  let formatMinute = minute;
+  let formatSecond = second;
 
   const formatInput = populateFormatPomodoro(minute, second);
   minuteInputElement.value = formatInput[0];
   secondInputElement.value = formatInput[1];
-
-  if(minuteInputElement.value == 0 && secondInputElement.value == 0){
-    minuteInputElement.value = 0;
-    secondInputElement.value = 0;
+  pomodoroCounterDisplayElement.innerHTML = `${formatMinute}:${formatSecond}`;
+  if(minuteInputElement.value > 0 && secondInputElement.value > 1){
+    secondInputElement.value--;
   }else if (secondInputElement.value != 0){
     secondInputElement.value--;
   }else if (minuteInputElement.value != 0){
@@ -68,14 +69,9 @@ function startInterval(){
 function stopTimer() {
   clearInterval(timer);
 }
-/*function pausePomodoro() {
-  addPomodoroToListButton.disabled = false;
-  startOrPauseAPomodoroFromListButton.setAttribute("start-pause-state", "start");
-  startOrPauseAPomodoroFromListButton.innerText = "start";
-  
-};*/
 
-/*function pomodoroCountdown() {
+
+function pomodoroCountdown() {
   milliseconds -= 1000;
 
   let minute = 0;
@@ -92,7 +88,7 @@ function stopTimer() {
   populateFormatPomodoro(minute, second);
 
   if (milliseconds == 0) pomodoroComplete();
- };*/
+ };
 
  function pomodoroComplete() {
   pausePomodoro();
@@ -119,5 +115,6 @@ function stopTimer() {
 
    pomodoroCounterDisplayElement.innerText = `${formatMinute}:${formatSecond}`;
    return [formatMinute, formatSecond];
+
 };
   
