@@ -4,14 +4,12 @@ const minuteInputElement = document.getElementById("minutesInputText");
 const secondInputElement = document.getElementById("secondsInputText");
 const addPomodoroToListButton = document.getElementById("pomorodoForm-addBtn");
 const startOrPauseAPomodoroFromListButton = document.getElementById("pomorodoForm-StartPauseBtn");
-let timer;
-let totalMilliseconds;
 
-minuteInputElement.addEventListener("keyup", inputFields);
-secondInputElement.addEventListener("keyup", inputFields);
+
+minuteInputElement.addEventListener("keydown", inputFields);
+secondInputElement.addEventListener("keydown", inputFields);
 addPomodoroToListButton.addEventListener("click", addClick);
-startOrPauseAPomodoroFromListButton.addEventListener("click", addClick);
-
+startOrPauseAPomodoroFromListButton.addEventListener("click", startPomodoro);
 
 function inputFields() {
   let minute = Number(minuteInputElement.value);
@@ -33,55 +31,68 @@ function addClick() {
   secondInputElement.value = formatInput[1];
 
   startOrPauseAPomodoroFromListButton.disabled = false;
+  
 };
 
-function startOrPauseClick() {
-  const btnState = startOrPauseAPomodoroFromListButton.getAttribute("start-pause-state");
+let timer = null;
 
-  if (btnState == "start") startPomodoro();
-  if (btnState == "pause") pausePomodoro();
-};
-
-function startPomodoro() {
+ function startPomodoro() {
   addPomodoroToListButton.disabled = true;
-  startOrPauseAPomodoroFromListButton.setAttribute("start-pause-state", "pause");
-  startOrPauseAPomodoroFromListButton.innerText = "pause";
 
-  let timeArray = pomodoroCounterDisplayElement.innerText.split(":");
-  let minute = Number(timeArray[0]);
-  let second = Number(timeArray[1]);
+  let minute = Number(minuteInputElement.value);
+  let second = Number(secondInputElement.value);
 
-  totalMilliseconds = minute * 60000 + second * 1000;
+  const formatInput = populateFormatPomodoro(minute, second);
+  minuteInputElement.value = formatInput[0];
+  secondInputElement.value = formatInput[1];
 
-  timer = setInterval(pomodoroCountdown, 1000);
+  if(minuteInputElement.value == 0 && secondInputElement.value == 0){
+    minuteInputElement.value = 0;
+    secondInputElement.value = 0;
+  }else if (secondInputElement.value != 0){
+    secondInputElement.value--;
+  }else if (minuteInputElement.value != 0){
+    secondInputElement.value = 59;
+    minuteInputElement.value--;
+  }
+  return;
 };
 
-function pausePomodoro() {
+function startInterval(){
+    timer = setInterval(function(){
+      startPomodoro();
+    },1000);
+  }
+  startInterval();
+
+function stopTimer() {
+  clearInterval(timer);
+}
+/*function pausePomodoro() {
   addPomodoroToListButton.disabled = false;
   startOrPauseAPomodoroFromListButton.setAttribute("start-pause-state", "start");
   startOrPauseAPomodoroFromListButton.innerText = "start";
   
-  clearInterval(timer);
-};
+};*/
 
-function pomodoroCountdown() {
-  totalMilliseconds -= 1000;
+/*function pomodoroCountdown() {
+  milliseconds -= 1000;
 
   let minute = 0;
   let second = 0;
 
-  if (totalMilliseconds >= 60000) {
-    minute = parseInt(totalMilliseconds / 60000)
+  if (milliseconds >= 60000) {
+    minute = parseInt(milliseconds / 60000)
   };
 
-  if (totalMilliseconds >= 1000) {
-    second = (totalMilliseconds - minute * 60000) / 1000
+  if (milliseconds >= 1000) {
+    second = (milliseconds - minute * 60000) / 1000
   };
 
   populateFormatPomodoro(minute, second);
 
-  if (totalMilliseconds == 0) pomodoroComplete();
- };
+  if (milliseconds == 0) pomodoroComplete();
+ };*/
 
  function pomodoroComplete() {
   pausePomodoro();
